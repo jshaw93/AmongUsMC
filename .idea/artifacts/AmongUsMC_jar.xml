@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AmongUsMC:jar">
+    <output-path>$USER_HOME$/Desktop/buildtools_spigot/1.16/plugins</output-path>
+    <root id="archive" name="AmongUsMC.jar">
+      <element id="module-output" name="AmongUsMC" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/buildtools_spigot/1.16/spigot-1.16.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,11 @@
+main: me.twoeggs.aumc.Main
+name: AmongUsMC
+author: Lore
+version: "1.0"
+api-version: 1.16
+commands:
+  Invisible:
+  Deadplayer:
+  RemoveDP:
+  SetImpostor:
+  TestTask:
