@@ -77,10 +77,10 @@ public class LightsTask implements Listener, CommandExecutor {
         // Run code here
         if(e.getCurrentItem().isSimilar(redGlassPane())) {
             int slot = e.getSlot();
-            inv.setItem(slot, itemStack());
+            setLights(slot, itemStack());
         }else if(e.getCurrentItem().isSimilar(itemStack())) {
             int slot = e.getSlot();
-            inv.setItem(slot, redGlassPane());
+            setLights(slot, redGlassPane());
         }
 
         runTask(player, inv);
@@ -97,6 +97,13 @@ public class LightsTask implements Listener, CommandExecutor {
         if(x >= 5) {
             inv.setItem(17, itemStack());
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(instance, player::closeInventory, 40);
+        }
+    }
+
+    private void setLights(int index, ItemStack itemStack) {
+        for(Player player : Main.playerMap.keySet()) {
+            Inventory inv = player.getOpenInventory().getTopInventory();
+            inv.setItem(index, itemStack);
         }
     }
 }
