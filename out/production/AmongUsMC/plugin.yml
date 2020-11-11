@@ -8,5 +8,6 @@ commands:
   Deadplayer:
   RemoveDP:
   SetImpostor:
-  TestTask:
   LightsTask:
+  TestTask:
+  TestSabotage:

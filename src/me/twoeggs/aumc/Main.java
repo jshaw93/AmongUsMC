@@ -8,9 +8,11 @@ import me.twoeggs.aumc.events.*;
 import me.twoeggs.aumc.events.runnables.CheckInvisibilityRunnable;
 import me.twoeggs.aumc.npcs.DeadPlayer;
 import me.twoeggs.aumc.playerdata.PlayerData;
+import me.twoeggs.aumc.sabotages.TestSabotage;
 import me.twoeggs.aumc.tasks.LightsTask;
 import me.twoeggs.aumc.tasks.TestTask;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +32,7 @@ public class Main extends JavaPlugin {
     // Simon says task data
     public static HashMap<Player, int[]> simonMap = new HashMap<>();
     // Lights Data
-    public static HashMap<Integer, ItemStack> lightsData = new HashMap<>();
+    public static Inventory lightsInv = null;
 
     @Override
     public void onEnable() {
@@ -50,6 +52,7 @@ public class Main extends JavaPlugin {
         this.getCommand("setimpostor").setExecutor(new SetImpostor());
 
         this.getCommand("testtask").setExecutor(new TestTask(this));
+        this.getCommand("testsabotage").setExecutor(new TestSabotage());
         this.getCommand("lightstask").setExecutor(new LightsTask(this));
         pm.registerEvents(new TestTask(this), this);
         pm.registerEvents(new LightsTask(this), this);

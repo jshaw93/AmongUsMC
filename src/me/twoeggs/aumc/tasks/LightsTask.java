@@ -1,6 +1,7 @@
 package me.twoeggs.aumc.tasks;
 
 import me.twoeggs.aumc.Main;
+import me.twoeggs.aumc.playerdata.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
@@ -29,15 +32,10 @@ public class LightsTask implements Listener, CommandExecutor {
         if(s.equalsIgnoreCase("lightstask")) {
             if(!(sender instanceof Player)) return true;
             Player player = (Player)sender;
-            for(int i = 2; i < 7; i++) {
-                int z = new Random().nextInt(2);
-                if(z == 0) {
-                    Main.lightsData.put(i, redGlassPane());
-                } else {
-                    Main.lightsData.put(i, itemStack());
-                }
+            if(Main.lightsInv == null) {
+                Main.lightsInv = inventory();
             }
-            openGUI(player, inventory());
+            openGUI(player, Main.lightsInv);
             return true;
         }
         return false;
@@ -56,9 +54,20 @@ public class LightsTask implements Listener, CommandExecutor {
 
     private Inventory inventory() {
         Inventory inv = Bukkit.createInventory(null, 18, ChatColor.DARK_BLUE+"Lights");
-        for(Object i : Main.lightsData.keySet()) {
-            int index = (int) i;
-            inv.setItem(index, Main.lightsData.get(index));
+        int count = 0;
+        for(int i = 2; i < 7; i++) {
+            int z = new Random().nextInt(2);
+            if(z == 0) {
+                inv.setItem(i, redGlassPane());
+                count++;
+            } else {
+                inv.setItem(i, itemStack());
+            }
+        }
+        if(count == 0) {
+            for(int i = 2; i < 7; i++) {
+                inv.setItem(i, redGlassPane());
+            }
         }
         inv.setItem(17, redGlassPane());
         return inv;
@@ -69,7 +78,7 @@ public class LightsTask implements Listener, CommandExecutor {
         if(!ChatColor.stripColor(e.getView().getTitle()).equalsIgnoreCase("Lights")) return;
         if(e.getCurrentItem() == null) return;
         Player player = (Player)e.getWhoClicked();
-        Inventory inv = e.getClickedInventory();
+        Inventory inv = Main.lightsInv;
         if(inv == null) return;
 
         e.setCancelled(true);
@@ -77,10 +86,10 @@ public class LightsTask implements Listener, CommandExecutor {
         // Run code here
         if(e.getCurrentItem().isSimilar(redGlassPane())) {
             int slot = e.getSlot();
-            setLights(slot, itemStack());
+            inv.setItem(slot, itemStack());
         }else if(e.getCurrentItem().isSimilar(itemStack())) {
             int slot = e.getSlot();
-            setLights(slot, redGlassPane());
+            inv.setItem(slot, redGlassPane());
         }
 
         runTask(player, inv);
@@ -96,14 +105,21 @@ public class LightsTask implements Listener, CommandExecutor {
         }
         if(x >= 5) {
             inv.setItem(17, itemStack());
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(instance, player::closeInventory, 40);
-        }
-    }
-
-    private void setLights(int index, ItemStack itemStack) {
-        for(Player player : Main.playerMap.keySet()) {
-            Inventory inv = player.getOpenInventory().getTopInventory();
-            inv.setItem(index, itemStack);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> {
+                for(Player p : Main.playerMap.keySet()) {
+                    Inventory inventory = p.getOpenInventory().getTopInventory();
+                    PlayerData pd = Main.playerMap.get(p);
+                    if(inv == inventory) {
+                        p.closeInventory();
+                    }
+                    PotionEffect pe = new PotionEffect(PotionEffectType.BLINDNESS, 60,0, true);
+                    p.removePotionEffect(PotionEffectType.BLINDNESS);
+                    if(pd.isImpostor()) {
+                        p.addPotionEffect(pe);
+                    }
+                }
+            }, 40);
+            Main.lightsInv = null;
         }
     }
 }
