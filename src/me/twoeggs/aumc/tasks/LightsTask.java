@@ -112,7 +112,7 @@ public class LightsTask implements Listener, CommandExecutor {
                     if(inv == inventory) {
                         p.closeInventory();
                     }
-                    PotionEffect pe = new PotionEffect(PotionEffectType.BLINDNESS, 60,0, true);
+                    PotionEffect pe = new PotionEffect(PotionEffectType.BLINDNESS, 60,1, true);
                     p.removePotionEffect(PotionEffectType.BLINDNESS);
                     if(pd.isImpostor()) {
                         p.addPotionEffect(pe);

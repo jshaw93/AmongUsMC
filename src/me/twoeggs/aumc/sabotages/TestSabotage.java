@@ -17,7 +17,7 @@ public class TestSabotage implements CommandExecutor {
             for(Player player : Main.playerMap.keySet()) {
                 PlayerData pd = Main.playerMap.get(player);
                 if(!pd.isImpostor()) {
-                    PotionEffect pe = new PotionEffect(PotionEffectType.BLINDNESS, 1285489,0, true);
+                    PotionEffect pe = new PotionEffect(PotionEffectType.BLINDNESS, 1285489,1, true);
                     player.addPotionEffect(pe);
                 }
             }
