@@ -9,3 +9,4 @@ commands:
   RemoveDP:
   SetImpostor:
   TestTask:
+  LightsTask:

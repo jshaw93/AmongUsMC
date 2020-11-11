@@ -14,6 +14,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Random;
+
 public class LightsTask implements Listener, CommandExecutor {
 
     private final Main instance;
@@ -24,9 +26,17 @@ public class LightsTask implements Listener, CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if(s.equalsIgnoreCase("lighttask")) {
+        if(s.equalsIgnoreCase("lightstask")) {
             if(!(sender instanceof Player)) return true;
             Player player = (Player)sender;
+            for(int i = 2; i < 7; i++) {
+                int z = new Random().nextInt(2);
+                if(z == 0) {
+                    Main.lightsData.put(i, redGlassPane());
+                } else {
+                    Main.lightsData.put(i, itemStack());
+                }
+            }
             openGUI(player, inventory());
             return true;
         }
@@ -46,8 +56,9 @@ public class LightsTask implements Listener, CommandExecutor {
 
     private Inventory inventory() {
         Inventory inv = Bukkit.createInventory(null, 18, ChatColor.DARK_BLUE+"Lights");
-        for(int i = 2; i < 7; i++) {
-            inv.setItem(i, redGlassPane());
+        for(Object i : Main.lightsData.keySet()) {
+            int index = (int) i;
+            inv.setItem(index, Main.lightsData.get(index));
         }
         inv.setItem(17, redGlassPane());
         return inv;
@@ -59,6 +70,7 @@ public class LightsTask implements Listener, CommandExecutor {
         if(e.getCurrentItem() == null) return;
         Player player = (Player)e.getWhoClicked();
         Inventory inv = e.getClickedInventory();
+        if(inv == null) return;
 
         e.setCancelled(true);
 

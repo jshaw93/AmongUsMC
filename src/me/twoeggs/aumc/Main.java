@@ -8,6 +8,7 @@ import me.twoeggs.aumc.events.*;
 import me.twoeggs.aumc.events.runnables.CheckInvisibilityRunnable;
 import me.twoeggs.aumc.npcs.DeadPlayer;
 import me.twoeggs.aumc.playerdata.PlayerData;
+import me.twoeggs.aumc.tasks.LightsTask;
 import me.twoeggs.aumc.tasks.TestTask;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +29,8 @@ public class Main extends JavaPlugin {
 
     // Simon says task data
     public static HashMap<Player, int[]> simonMap = new HashMap<>();
+    // Lights Data
+    public static HashMap<Integer, ItemStack> lightsData = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -47,7 +50,9 @@ public class Main extends JavaPlugin {
         this.getCommand("setimpostor").setExecutor(new SetImpostor());
 
         this.getCommand("testtask").setExecutor(new TestTask(this));
+        this.getCommand("lightstask").setExecutor(new LightsTask(this));
         pm.registerEvents(new TestTask(this), this);
+        pm.registerEvents(new LightsTask(this), this);
     }
 
     @Override
