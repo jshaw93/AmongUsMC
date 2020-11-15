@@ -64,6 +64,7 @@ public class TestTask implements Listener, CommandExecutor {
     public void onClick(InventoryClickEvent e) {
         if(!ChatColor.stripColor(e.getView().getTitle()).equalsIgnoreCase("yeet")) return;
         if(e.getCurrentItem() == null) return;
-        int x = 0;
+        if(!e.getCurrentItem().isSimilar(grayGlassPane())) return;
+        int index = e.getSlot();
     }
 }
