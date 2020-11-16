@@ -14,9 +14,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Random;
+
 public class TestTask implements Listener, CommandExecutor {
 
     private final Main instance;
+
+    private int[] indexes = new int[] {10, 11, 12, 14, 15, 16, 28, 29, 30, 32, 33, 34};
 
     public TestTask(Main instance) {
         this.instance = instance;
@@ -27,8 +31,21 @@ public class TestTask implements Listener, CommandExecutor {
         if(s.equalsIgnoreCase("testtask")) {
             if(!(sender instanceof Player)) return true;
             Player player = (Player)sender;
-
-            openGUI(player, inventory());
+            Inventory inv = inventory();
+            int count = 0;
+            for(int index : indexes) {
+                int x = new Random().nextInt(2);
+                if(x == 0) {
+                    inv.setItem(index, limeGlassPane());
+                    count++;
+                }
+            }
+            if(count == 0) {
+                for(int index : indexes) {
+                    inv.setItem(index, limeGlassPane());
+                }
+            }
+            openGUI(player, inv);
             return true;
         }
         return false;
@@ -64,12 +81,21 @@ public class TestTask implements Listener, CommandExecutor {
         for(int i = 9; i < 37; i+=9) {
             inv.setItem(i, blackGlassPane());
         }
+        // Middle bars
+        // Horizontal
+        for(int i = 19; i < 27; i++) {
+            inv.setItem(i, blackGlassPane());
+        }
+        // Vertical
+        for(int i = 4; i < 45; i+=9) {
+            inv.setItem(i, blackGlassPane());
+        }
         // Right bar
-        for(int i = 8; i < 33; i+=9) {
+        for(int i = 8; i < 37; i+=9) {
             inv.setItem(i, blackGlassPane());
         }
         //Bottom bar
-        for(int i = 37; i < 46; i++) {
+        for(int i = 37; i < 45; i++) {
             inv.setItem(i, blackGlassPane());
         }
         return inv;
@@ -79,10 +105,23 @@ public class TestTask implements Listener, CommandExecutor {
     public void onClick(InventoryClickEvent e) {
         if(!ChatColor.stripColor(e.getView().getTitle()).equalsIgnoreCase("yeet")) return;
         if(e.getCurrentItem() == null) return;
-        if(!e.getCurrentItem().isSimilar(grayGlassPane())) {
+        if(!e.getCurrentItem().isSimilar(limeGlassPane())) {
             e.setCancelled(true);
             return;
         }
         int index = e.getSlot();
+        Inventory inv = e.getClickedInventory();
+        if(inv == null) return;
+        inv.setItem(index, null);
+        int count = 0;
+        for(int i : indexes) {
+            if(inv.getItem(i) != null) {
+                count++;
+            }
+        }
+        if(count == 0) {
+            Player player = (Player)e.getWhoClicked();
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(instance, player::closeInventory, 20);
+        }
     }
 }
