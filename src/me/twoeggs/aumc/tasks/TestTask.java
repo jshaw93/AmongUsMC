@@ -4,6 +4,7 @@ import me.twoeggs.aumc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +21,7 @@ public class TestTask implements Listener, CommandExecutor {
 
     private final Main instance;
 
-    private int[] indexes = new int[] {10, 11, 12, 14, 15, 16, 28, 29, 30, 32, 33, 34};
+    private final int[] indexes = new int[] {10, 11, 12, 14, 15, 16, 28, 29, 30, 32, 33, 34};
 
     public TestTask(Main instance) {
         this.instance = instance;
@@ -32,17 +33,18 @@ public class TestTask implements Listener, CommandExecutor {
             if(!(sender instanceof Player)) return true;
             Player player = (Player)sender;
             Inventory inv = inventory();
+            ItemStack leaves = new ItemStack(Material.OAK_LEAVES);
             int count = 0;
             for(int index : indexes) {
                 int x = new Random().nextInt(2);
                 if(x == 0) {
-                    inv.setItem(index, limeGlassPane());
+                    inv.setItem(index, leaves);
                     count++;
                 }
             }
             if(count == 0) {
                 for(int index : indexes) {
-                    inv.setItem(index, limeGlassPane());
+                    inv.setItem(index, leaves);
                 }
             }
             openGUI(player, inv);
@@ -103,16 +105,19 @@ public class TestTask implements Listener, CommandExecutor {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
+        ItemStack leaves = new ItemStack(Material.OAK_LEAVES);
         if(!ChatColor.stripColor(e.getView().getTitle()).equalsIgnoreCase("yeet")) return;
         if(e.getCurrentItem() == null) return;
-        if(!e.getCurrentItem().isSimilar(limeGlassPane())) {
+        if(!e.getCurrentItem().isSimilar(leaves)) {
             e.setCancelled(true);
             return;
         }
+        Player player = (Player)e.getWhoClicked();
         int index = e.getSlot();
         Inventory inv = e.getClickedInventory();
         if(inv == null) return;
         inv.setItem(index, null);
+        player.playSound(player.getLocation(), Sound.BLOCK_CROP_BREAK, 1.0f, 1.0f);
         int count = 0;
         for(int i : indexes) {
             if(inv.getItem(i) != null) {
@@ -120,7 +125,6 @@ public class TestTask implements Listener, CommandExecutor {
             }
         }
         if(count == 0) {
-            Player player = (Player)e.getWhoClicked();
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(instance, player::closeInventory, 20);
         }
     }
