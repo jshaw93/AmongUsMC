@@ -105,10 +105,9 @@ public class TestTask implements Listener, CommandExecutor {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        ItemStack leaves = new ItemStack(Material.OAK_LEAVES);
         if(!ChatColor.stripColor(e.getView().getTitle()).equalsIgnoreCase("yeet")) return;
         if(e.getCurrentItem() == null) return;
-        if(!e.getCurrentItem().isSimilar(leaves)) {
+        if(!e.getCurrentItem().isSimilar(new ItemStack(Material.OAK_LEAVES))) {
             e.setCancelled(true);
             return;
         }
