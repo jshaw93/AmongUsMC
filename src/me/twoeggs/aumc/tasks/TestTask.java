@@ -4,7 +4,6 @@ import me.twoeggs.aumc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,13 +14,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Random;
-
 public class TestTask implements Listener, CommandExecutor {
 
     private final Main instance;
-
-    private final int[] indexes = new int[] {10, 11, 12, 14, 15, 16, 28, 29, 30, 32, 33, 34};
 
     public TestTask(Main instance) {
         this.instance = instance;
