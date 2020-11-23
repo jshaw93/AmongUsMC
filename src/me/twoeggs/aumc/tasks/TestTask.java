@@ -60,6 +60,7 @@ public class TestTask implements Listener, CommandExecutor {
         for(int i = 0; i < 9; i++) {
             inv.setItem(i, blackGlassPane());
         }
+        inv.setItem(44, limeGlassPane());
         return inv;
     }
 
