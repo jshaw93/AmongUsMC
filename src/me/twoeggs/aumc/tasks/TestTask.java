@@ -72,6 +72,8 @@ public class TestTask implements Listener, CommandExecutor {
             e.setCancelled(true);
             return;
         }
+        Inventory inv = e.getClickedInventory();
+        if(inv == null) return;
         Player player = (Player)e.getWhoClicked();
     }
 }
