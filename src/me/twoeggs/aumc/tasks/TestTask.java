@@ -57,9 +57,9 @@ public class TestTask implements Listener, CommandExecutor {
     private Inventory inventory() {
         Inventory inv = Bukkit.createInventory(null, 45, ChatColor.DARK_BLUE+"yeet");
         // Top bar
-        for(int i = 0; i < 9; i++) {
-            inv.setItem(i, blackGlassPane());
-        }
+        for(int i = 0; i < 9; i++) inv.setItem(i, blackGlassPane());
+        // Bottom bar
+        for(int i = 36; i < 43; i++) inv.setItem(i, blackGlassPane());
         inv.setItem(44, limeGlassPane());
         return inv;
     }
